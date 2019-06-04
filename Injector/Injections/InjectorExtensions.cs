@@ -1,10 +1,20 @@
-﻿using System;
-using Injections.Resolvers;
+﻿using Injections.Resolvers;
+using System;
 
 namespace Injections
 {
   public static class InjectorExtensions
   {
+    public static void ToValue<T>(this IInjector injector, Func<T> valueProvider)
+    {
+      injector.Register(typeof(T), new DynamicResolver(() => valueProvider()));
+    }
+
+    public static void ToValue<T>(this IInjector injector, Func<Type, T> valueProvider)
+    {
+      injector.Register(typeof(T), new DynamicResolver<T>(type => valueProvider(type)));
+    }
+
     public static void ToValue(this IInjector injector, object value)
     {
       injector.Register(value.GetType(), new ValueResolver(value));
@@ -23,7 +33,7 @@ namespace Injections
     public static void ToFactory<T>(this IInjector injector)
     {
       CheckImpl<T>();
-      ToValue(injector, typeof(T));
+      ToFactory(injector, typeof(T));
     }
 
     public static void ToFactory(this IInjector injector, Type type)
