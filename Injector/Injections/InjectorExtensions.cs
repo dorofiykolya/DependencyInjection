@@ -35,6 +35,11 @@ namespace Injections
       injector.Register(typeof(TApi), new ValueResolver(value));
     }
 
+    public static void ToValue(this IInjector injector, Type api, object value)
+    {
+      injector.Register(api, new ValueResolver(value));
+    }
+
     public static void ToFactory<T>(this IInjector injector)
     {
       CheckImpl<T>();
