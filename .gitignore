@@ -3,3 +3,4 @@
 /Injector/obj/
 /InjectorXUnitTest/bin/
 /InjectorXUnitTest/obj/
+*.meta
