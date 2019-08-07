@@ -10,9 +10,14 @@ namespace Injections
       injector.Register(typeof(T), new DynamicResolver(() => valueProvider()));
     }
 
-    public static void ToValue<T>(this IInjector injector, Func<Type, T> valueProvider)
+    public static void ToValue<TApi>(this IInjector injector, Func<object> valueProvider)
     {
-      injector.Register(typeof(T), new DynamicResolver<T>(type => valueProvider(type)));
+      injector.Register(typeof(TApi), new DynamicResolver(valueProvider));
+    }
+
+    public static void ToValue<TApi, TValue>(this IInjector injector, Func<TValue> valueProvider)
+    {
+      injector.Register(typeof(TApi), new DynamicResolver<TValue>(valueProvider));
     }
 
     public static void ToValue(this IInjector injector, object value)
