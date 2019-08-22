@@ -64,10 +64,15 @@ namespace Injections
       injector.Register(typeof(T), new SingletonResolver(typeof(T), oneInstance));
     }
 
-    public static void ToSingleton<TApi, TImpl>(this IInjector injector, bool oneInstance = true) where TImpl : TApi
+    public static void ToSingleton<TApi, TImpl>(this IInjector injector, bool oneInstance = true, bool registerImpl = false) where TImpl : TApi
     {
       CheckImpl<TImpl>();
-      injector.Register(typeof(TApi), new SingletonResolver(typeof(TImpl), oneInstance));
+      var resolver = new SingletonResolver(typeof(TImpl), oneInstance);
+      injector.Register(typeof(TApi), resolver);
+      if (registerImpl)
+      {
+        injector.Register(typeof(TImpl), resolver);
+      }
     }
 
     public static void ToSingleton(this IInjector injector, Type type, bool oneInstance = true)
